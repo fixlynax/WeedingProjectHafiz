@@ -18,7 +18,9 @@
 
 	<link href='https://fonts.googleapis.com/css?family=Work+Sans:400,300,600,400italic,700' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
-	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<link rel="icon" type="image/x-icon" href="images/logoIcon2.png">
+
 	<!-- Animate.css -->
 	<link rel="stylesheet" href="css/animate.css">
 	<!-- Icomoon Icon Fonts-->
@@ -48,6 +50,99 @@
         height: 400px;
         margin: 0 auto;
     }
+
+	canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+	
+	.modal {
+            text-align: center;
+        }
+
+        .modal-dialog {
+            display: inline-block;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        /* Add some padding and background color to the modal content */
+        .modal-content {
+            padding: 20px;
+            background-color: #f9f9f9;
+			position: relative;
+            z-index: 1; /* Set a higher z-index to ensure the modal content is above the blurred background */
+        }
+
+		.modal::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: inherit;
+            backdrop-filter: blur(5px); /* Adjust the blur intensity as needed */
+            z-index: -1; /* Set a lower z-index to place the blurred background behind the modal content */
+        }
+
+        /* Style the modal header and close button */
+        .modal-header {
+            border-bottom: none;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .close {
+            font-size: 20px;
+            font-weight: bold;
+            color: #aaa;
+            opacity: 1;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #555;
+            opacity: 0.8;
+        }
+
+        /* Style the modal body */
+        .modal-body {
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* Style the modal footer */
+        .modal-footer {
+            border-top: none;
+        }
+
+        /* Add a background color to the "Close" button */
+        #closeButton {
+            background-color: #333;
+            color: #fff;
+        }
+
+        #closeButton:hover,
+        #closeButton:focus {
+            background-color: #555;
+        }
+
+        /* Blur the background when the modal is open */
+        .modal-open .modal-blur {
+            filter: blur(5px);
+            -webkit-filter: blur(5px);
+            -moz-filter: blur(5px);
+            -o-filter: blur(5px);
+            -ms-filter: blur(5px);
+        }
 		
 	</style>
 
@@ -76,6 +171,27 @@
 		</div>
 	</nav>
 
+	<div id="welcomeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Welcome Mr/Mrs</h4>
+            </div>
+            <div class="modal-body text-center">
+                <p>Invitation to the Wedding of Iqbal & Balqis</p>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button id="closeButton" type="button" class="btn btn-default" data-dismiss="modal">Open</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 	<header id="fh5co-header" class="fh5co-cover" role="banner" style="background-image:url(images/img_bg_2.jpg);" data-stellar-background-ratio="0.5">
 		<div class="overlay"></div>
 		<div class="container">
@@ -88,6 +204,61 @@
 							<div class="simply-countdown simply-countdown-one"></div>
 							<p><a href="#" class="btn btn-default btn-sm" onclick="saveDateToCalendar()">Save the date</a></p>
 							<!-- <p><a href="#" class="btn btn-default btn-sm">Save the date</a></p> -->
+							<audio id="audio" src="lagu.mp3"></audio>
+							<button id="playPauseBtn" class="btn btn-default btn-sm">
+								<i class="fas fa-play"></i>
+							</button>
+
+							<canvas id="canvas"></canvas>
+
+							<script>
+								const audioElement = document.getElementById('audio');
+								const playPauseBtn = document.getElementById('playPauseBtn');
+
+								// Play and Pause functionality
+								let isPlaying = false;
+
+								playPauseBtn.addEventListener('click', () => {
+									if (isPlaying) {
+										audioElement.pause();
+										playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+									} else {
+										audioElement.play();
+										playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+										createLoveElement();
+									}
+									isPlaying = !isPlaying;
+									
+									// Rain of love effect
+									for (let i = 0; i < 50; i++) {
+									setTimeout(createLoveElement, i * 100);
+									}
+
+								});
+
+								// Rain of love effect
+								function createLoveElement() {
+									const love = document.createElement("span");
+									love.innerHTML = "❤";
+									love.style.position = "absolute";
+									love.style.top = Math.random() * 100 + "%";
+									love.style.left = Math.random() * 100 + "%";
+									love.style.fontSize = Math.random() * 30 + 10 + "px";
+									love.style.color = getRandomColor();
+									love.style.pointerEvents = "none";
+									document.body.appendChild(love);
+
+									setTimeout(() => {
+									love.remove();
+									}, 1500);
+								}
+
+								function getRandomColor() {
+									const colors = ["#FF69B4", "#FFC0CB", "#FF1493", "#FF00FF", "#FFB6C1"];
+									const randomIndex = Math.floor(Math.random() * colors.length);
+									return colors[randomIndex];
+								}
+							</script>
 						</div>
 					</div>
 				</div>
@@ -181,36 +352,25 @@
 	</div>
 
 	<div id="fh5co-services" class="fh5co-section-gray">
-		<div class="container">
-			
-			<div class="row animate-box">
-				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-					<h2>Location Wedding</h2>
-					<p>TWelcome to the beautiful wedding venue of Balqis and Iqbal. We are delighted to invite you to join us as we celebrate our special day at the enchanting Masjid Al-Ehsan in Puchong, Selangor. Nestled amidst picturesque surroundings, this venue provides a serene and romantic ambiance, perfect for our joyful union.</p>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-md-6 animate-box">
-					<div class="map-container">
-						<p style="text-align: center; color: black;">Wedding Caremony</p>
-						<iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3987.2395072986483!2d103.12485881475497!3d2.0601288984982062!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMsKwMDMnMzYuNSJOIDEwM8KwMDcnMzcuNCJF!5e0!3m2!1sen!2smy!4v1689341094427!5m2!1sen!2smy" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
-					</div>
-
-				</div>
-
-				<div class="col-md-6 animate-box">
-					<div class="map-container">
-						<p style="text-align: center; color: black;">Wedding Day</p>
-            			<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d254987.84706682738!2d101.35639888671876!3d3.0450200000000045!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc4b3a185c88ff%3A0x6802996e18dc35bd!2sMasjid%20Al-Ehsan!5e0!3m2!1sen!2smy!4v1689340884524!5m2!1sen!2smy" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
-        			</div>
-				</div>
-			</div>
-
-			
-		</div>
-	</div>
-
+    <div class="container">
+        <div class="row animate-box">
+            <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                <h2>Location Wedding</h2>
+                <p>Welcome to the beautiful wedding venue of Balqis and Iqbal. We are delighted to invite you to join us as we celebrate our special day at the enchanting Masjid Al-Ehsan in Puchong, Selangor. Nestled amidst picturesque surroundings, this venue provides a serene and romantic ambiance, perfect for our joyful union.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 animate-box text-center">
+                <!-- Center the "Wedding Ceremony" text -->
+                <p style="color: black;">Wedding Ceremony</p>
+                <div class="map-container">
+                    <!-- Center the embedded Google Maps iframe -->
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d254987.84706682738!2d101.35639888671876!3d3.0450200000000045!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc4b3a185c88ff%3A0x6802996e18dc35bd!2sMasjid%20Al-Ehsan!5e0!3m2!1sen!2smy!4v1689340884524!5m2!1sen!2smy" width="100%" height="400" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 	<div id="fh5co-started" class="fh5co-bg" style="background-image:url(images/img_bg_4.jpg);">
 		<div class="overlay"></div>
@@ -362,6 +522,19 @@ END:VCALENDAR`;
 function formatDate(date) {
     return date.toISOString().replace(/-|:|\.\d+/g, "");
 }
+
+$(document).ready(function() {
+            // Show the welcome modal when the page loads
+            $("#welcomeModal").modal("show");
+
+            // Play the audio when the Close button is clicked
+            $("#closeButton").click(function() {
+                const audioElement = document.getElementById('audio');
+				const playPauseBtn = document.getElementById('playPauseBtn');
+                audioElement.play();
+				playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            });
+        });
 </script>
 
 	</body>
